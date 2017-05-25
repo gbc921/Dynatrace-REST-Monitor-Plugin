@@ -43,6 +43,9 @@ public class Config implements Migrator {
 	protected static final String CONFIG_SERVER_PASSWORD = "serverPassword";
 	protected static final String CONFIG_SERVER_AUTH_PREEMPTIVE = "serverAuthPreemptive";
 
+	protected static final String CONFIG_USE_HEADER = "useHeader";
+	protected static final String CONFIG_HEADER = "header";
+
 	protected static final String CONFIG_USE_PROXY = "useProxy";
 	protected static final String CONFIG_PROXY_HOST = "proxyHost";
 	protected static final String CONFIG_PROXY_PORT = "proxyPort";
@@ -75,6 +78,10 @@ public class Config implements Migrator {
 	String serverUsername;
 	String serverPassword;
 	boolean serverAuthPreemptive;
+	
+	// additional headers
+	boolean useHeader;
+	String header;
 	
 	// proxy
 	boolean useProxy;
@@ -145,6 +152,11 @@ public class Config implements Migrator {
 					: env.getConfigBoolean(CONFIG_SERVER_AUTH_PREEMPTIVE);
 		}
 
+		useHeader = env.getConfigBoolean(CONFIG_USE_HEADER) == null ? false : env.getConfigBoolean(CONFIG_USE_HEADER);
+		if (useHeader) {
+			header = env.getConfigString(CONFIG_HEADER);
+		}
+		
 		useProxy = env.getConfigBoolean(CONFIG_USE_PROXY) == null ? false : env.getConfigBoolean(CONFIG_USE_PROXY);
 		if (useProxy) {
 			proxyHost = env.getConfigString(CONFIG_PROXY_HOST);

@@ -99,6 +99,17 @@ public class RestMonitor implements Monitor {
 			return status;
 		}
 
+		try {
+			setupHeader(httpClient);
+		} catch (Exception ex) {
+			log.log(Level.FINE, "setting up header failed", ex);
+			status.setStatusCode(Status.StatusCode.ErrorInternal);
+			status.setMessage("Setting header failed: " + ex.getMessage() + "\n");
+			status.setShortMessage("Header setup failed: " + ex.getMessage());
+			status.setException(ex);
+			return status;
+		}
+
 		return status;
 	}
 
@@ -292,6 +303,20 @@ public class RestMonitor implements Monitor {
 					config.proxyAuthPreemptive);
 		} else {
 			httpClient.setProxy(config.proxyHost, config.proxyPort);
+		}
+	}
+	
+	private void setupHeader(DynaTraceHttpClient httpClient) {
+		if (!config.useHeader) {
+			return;
+		}
+		if (config.header.isEmpty()) {
+			return;
+		} else {
+			// TODO: Split the header string by ';' to be able to parse multiple headers
+			// split header string into header name and header value
+			String[] headerSplit = config.header.split(":");
+			httpClient.addRequestHeader(headerSplit[0], headerSplit[1]);
 		}
 	}
 

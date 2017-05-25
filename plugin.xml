@@ -51,6 +51,12 @@
         </list>
       </property>
       <property key="userAgent" label="User-Agent" type="string" description="The user agent string identifies the HTTP client and is sent with every request." default="dynaTrace/6" multiline="false" />
+      <property key="useHeader" label="Header(s)" type="boolean" description="If enabled, you can specify additional header(s) to be set when calling the request" default="false" />
+      <property key="header" label="Header" type="string" description="Includes one additional header when calling the request. The format to be used is on the format of 'headerName:headerValue'.&#xA;E.g.: Content-Type:application/x-www-form-urlencoded" default="Content-Type:application/x-www-form-urlencoded" multiline="false">
+        <visibility>
+          <rule key="useHeader" value="true" />
+        </visibility>
+      </property>
       <property key="serverAuth" label="Server authorization" type="list" description="Specify the authentication type to be used." default="Disabled">
         <list>
           <item value="Disabled" />
@@ -121,77 +127,17 @@
     <plugin configid="com.realdolmen.dynatrace.restmonitor" class="com.realdolmen.dynatrace.restmonitor.RestMonitor" />
   </extension>
   <extension point="com.dynatrace.diagnostics.pdk.monitormetricgroup" id="com.realdolmen.dynatrace.restmonitor.monitor.mgconnection" name="REST Monitor Connection">
-    <metricgroup
-          displayname="%METRICGROUP_REST_MONITOR"
-          monitorid="com.realdolmen.dynatrace.restmonitor.monitor">
-      <metric
-            defaultrate="none"
-            description="%METRIC_HOST_REACHABLE_DESCRIPTION"
-            displayname="%METRIC_HOST_REACHABLE_LABEL"
-            hidedisplayaggregation="sum count"
-            name="HostReachable"
-            unit="number"/>
-      <metric
-            defaultrate="none"
-            description="%METRIC_HEADER_SIZE_DESCRIPTION"
-            displayname="%METRIC_HEADER_SIZE_LABEL"
-            name="HeaderSize"
-            unit="bytes"/>
-      <metric
-            defaultrate="none"
-            description="%METRIC_FIRST_RESPONSE_DELAY_DESCRIPTION"
-            displayname="%METRIC_FIRST_RESPONSE_DELAY_LABEL"
-            hidedisplayaggregation="sum count"
-            name="FirstResponseDelay"
-            unit="ms"/>
-      <metric
-            defaultrate="none"
-            description="%METRIC_RESPONSE_COMPLETE_TIME_DESCRIPTION"
-            displayname="%METRIC_RESPONSE_COMPLETE_TIME_LABEL"
-            hidedisplayaggregation="sum count"
-            name="ResponseCompleteTime"
-            unit="ms"/>
-      <metric
-            defaultrate="none"
-            description="%METRIC_RESPONSE_SIZE_DESCRIPTION"
-            displayname="%METRIC_RESPONSE_SIZE_LABEL"
-            name="ResponseSize"
-            unit="bytes"/>
-      <metric
-            defaultrate="sec"
-            description="%METRIC_THROUGHPUT_DESCRIPTION"
-            displayname="%METRIC_THROUGHPUT_LABEL"
-            hidedisplayaggregation="sum count"
-            name="Throughput"
-            unit="kilobytes"/>
-      <metric
-            defaultrate="none"
-            description="%METRIC_HTTP_STATUS_CODE_DESCRIPTION"
-            displayname="%METRIC_HTTP_STATUS_CODE_LABEL"
-            hidedisplayaggregation="sum count"
-            name="HttpStatusCode"
-            unit="number"/>
-      <metric
-            defaultrate="none"
-            description="%METRIC_CONNECTION_CLOSE_DELAY_DESCRIPTION"
-            displayname="%METRIC_CONNECTION_CLOSE_DELAY_LABEL"
-            hidedisplayaggregation="sum count"
-            name="ConnectionCloseDelay"
-            unit="ms"/>
-      <metric
-            defaultrate="none"
-            description="%METRIC_SOCKET_TIMEDOUT_DESCRIPTION"
-            displayname="%METRIC_SOCKET_TIMEDOUT_LABEL"
-            hidedisplayaggregation="sum count"
-            name="SocketTimedOut"
-            unit="number"/>
-      <metric
-            defaultrate="none"
-            description="%METRIC_CONNECTION_TIMEDOUT_DESCRIPTION"
-            displayname="%METRIC_CONNECTION_TIMEDOUT_LABEL"
-            hidedisplayaggregation="sum count"
-            name="ConnectionTimedOut"
-            unit="number"/>
+    <metricgroup displayname="%METRICGROUP_REST_MONITOR" monitorid="com.realdolmen.dynatrace.restmonitor.monitor">
+      <metric defaultrate="none" description="%METRIC_HOST_REACHABLE_DESCRIPTION" displayname="%METRIC_HOST_REACHABLE_LABEL" hidedisplayaggregation="sum count" name="HostReachable" unit="number" />
+      <metric defaultrate="none" description="%METRIC_HEADER_SIZE_DESCRIPTION" displayname="%METRIC_HEADER_SIZE_LABEL" name="HeaderSize" unit="bytes" />
+      <metric defaultrate="none" description="%METRIC_FIRST_RESPONSE_DELAY_DESCRIPTION" displayname="%METRIC_FIRST_RESPONSE_DELAY_LABEL" hidedisplayaggregation="sum count" name="FirstResponseDelay" unit="ms" />
+      <metric defaultrate="none" description="%METRIC_RESPONSE_COMPLETE_TIME_DESCRIPTION" displayname="%METRIC_RESPONSE_COMPLETE_TIME_LABEL" hidedisplayaggregation="sum count" name="ResponseCompleteTime" unit="ms" />
+      <metric defaultrate="none" description="%METRIC_RESPONSE_SIZE_DESCRIPTION" displayname="%METRIC_RESPONSE_SIZE_LABEL" name="ResponseSize" unit="bytes" />
+      <metric defaultrate="sec" description="%METRIC_THROUGHPUT_DESCRIPTION" displayname="%METRIC_THROUGHPUT_LABEL" hidedisplayaggregation="sum count" name="Throughput" unit="kilobytes" />
+      <metric defaultrate="none" description="%METRIC_HTTP_STATUS_CODE_DESCRIPTION" displayname="%METRIC_HTTP_STATUS_CODE_LABEL" hidedisplayaggregation="sum count" name="HttpStatusCode" unit="number" />
+      <metric defaultrate="none" description="%METRIC_CONNECTION_CLOSE_DELAY_DESCRIPTION" displayname="%METRIC_CONNECTION_CLOSE_DELAY_LABEL" hidedisplayaggregation="sum count" name="ConnectionCloseDelay" unit="ms" />
+      <metric defaultrate="none" description="%METRIC_SOCKET_TIMEDOUT_DESCRIPTION" displayname="%METRIC_SOCKET_TIMEDOUT_LABEL" hidedisplayaggregation="sum count" name="SocketTimedOut" unit="number" />
+      <metric defaultrate="none" description="%METRIC_CONNECTION_TIMEDOUT_DESCRIPTION" displayname="%METRIC_CONNECTION_TIMEDOUT_LABEL" hidedisplayaggregation="sum count" name="ConnectionTimedOut" unit="number" />
     </metricgroup>
     <information>
       <description value="%METRICGROUP_CONNECTION_REST_MONITOR_DESCRIPTION" />
@@ -199,14 +145,9 @@
   </extension>
   <extension point="com.dynatrace.diagnostics.pdk.monitormetricgroup" id="com.realdolmen.dynatrace.restmonitor.monitor.mgmeasures" name="REST Monitor Measures">
     <metricgroup monitorid="com.realdolmen.dynatrace.restmonitor.monitor">
-      <metric 
-      		defaultrate="none" 
-      		name="capturedValue" 
-      		unit="number" 
-      		description="%METRIC_CAPTUREDVALUE_DESCRIPTION"
-      		displayname="%METRIC_CAPTUREDVALUE_LABEL" >
-        		<property key="xjsonPath" value="$.store.book[0].price" optional="false" />
-        		<property key="conversionMap" value="" optional="true" />
+      <metric defaultrate="none" name="capturedValue" unit="number" description="%METRIC_CAPTUREDVALUE_DESCRIPTION" displayname="%METRIC_CAPTUREDVALUE_LABEL">
+        <property key="xjsonPath" value="$.store.book[0].price" optional="false" />
+        <property key="conversionMap" value="" optional="true" />
       </metric>
     </metricgroup>
     <information>
