@@ -127,6 +127,9 @@ public class MeasureCapturedValues {
 		if (!jsonPath.isDefinite()){
 			throw new RestMonitorConfigurationException("jsonPath should be definite");
 		}
+		if (jsonBody.isEmpty()){
+			throw new RestMonitorConfigurationException("json response was empty!");
+		}
 		
 		Object obj = jsonPath.read(jsonBody);
 		
