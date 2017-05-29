@@ -99,17 +99,6 @@ public class RestMonitor implements Monitor {
 			return status;
 		}
 
-		try {
-			setupHeader(httpClient);
-		} catch (Exception ex) {
-			log.log(Level.FINE, "setting up header failed", ex);
-			status.setStatusCode(Status.StatusCode.ErrorInternal);
-			status.setMessage("Setting header failed: " + ex.getMessage() + "\n");
-			status.setShortMessage("Header setup failed: " + ex.getMessage());
-			status.setException(ex);
-			return status;
-		}
-
 		return status;
 	}
 
@@ -136,6 +125,20 @@ public class RestMonitor implements Monitor {
 		if (config.tagging) {
 			httpClient.addRequestHeader(Constants.HEADER_DYNATRACE, "NA=" + config.timerName);
 		}
+		
+		// set additional header(s)
+		try {
+			setupHeader(httpClient);
+		} catch (Exception ex) {
+			log.log(Level.WARNING, "setting up header failed", ex);
+			status.setStatusCode(Status.StatusCode.ErrorInternal);
+			status.setMessage("Setting header failed: " + ex.getMessage() + "\n");
+			status.setShortMessage("Header setup failed: " + ex.getMessage());
+			status.setException(ex);
+			return status;
+		}
+
+		
 
 		CloseableDynaTraceHttpResponse response = null;
 		try {
@@ -308,14 +311,19 @@ public class RestMonitor implements Monitor {
 	
 	private void setupHeader(DynaTraceHttpClient httpClient) {
 		if (!config.useHeader) {
+			log.finer("Not using an additional header.");
 			return;
 		}
 		if (config.header.isEmpty()) {
+			log.warning("Header field is empty");
 			return;
 		} else {
 			// TODO: Split the header string by ';' to be able to parse multiple headers
 			// split header string into header name and header value
+			log.finer("Splitting header");
 			String[] headerSplit = config.header.split(":");
+			log.fine("Header Content: " + headerSplit[0]);
+			log.fine("Header Value: " + headerSplit[1]);
 			httpClient.addRequestHeader(headerSplit[0], headerSplit[1]);
 		}
 	}
