@@ -57,6 +57,12 @@
           <rule key="useHeader" value="true" />
         </visibility>
       </property>
+      <property key="matchContent" label="Match content" type="boolean" description="If enabled, the specified string will be searched in the retrieved page." default="false" />
+      <property key="searchString" label="Search string" type="string" description="Enter a case-sensitive string to search for in the retrieved result. If the result contains the string, the measure will yield 1, otherwise 0." default="" multiline="true">
+        <visibility>
+          <rule key="matchContent" value="true" />
+        </visibility>
+      </property>
       <property key="serverAuth" label="Server authorization" type="list" description="Specify the authentication type to be used." default="Disabled">
         <list>
           <item value="Disabled" />
@@ -135,6 +141,7 @@
       <metric defaultrate="none" description="%METRIC_RESPONSE_SIZE_DESCRIPTION" displayname="%METRIC_RESPONSE_SIZE_LABEL" name="ResponseSize" unit="bytes" />
       <metric defaultrate="sec" description="%METRIC_THROUGHPUT_DESCRIPTION" displayname="%METRIC_THROUGHPUT_LABEL" hidedisplayaggregation="sum count" name="Throughput" unit="kilobytes" />
       <metric defaultrate="none" description="%METRIC_HTTP_STATUS_CODE_DESCRIPTION" displayname="%METRIC_HTTP_STATUS_CODE_LABEL" hidedisplayaggregation="sum count" name="HttpStatusCode" unit="number" />
+      <metric defaultrate="none" description="%METRIC_CONTENT_VERIFIED_DESCRIPTION" displayname="%METRIC_CONTENT_VERIFIED_LABEL" hidedisplayaggregation="sum count" name="ContentVerified" unit="number" />
       <metric defaultrate="none" description="%METRIC_CONNECTION_CLOSE_DELAY_DESCRIPTION" displayname="%METRIC_CONNECTION_CLOSE_DELAY_LABEL" hidedisplayaggregation="sum count" name="ConnectionCloseDelay" unit="ms" />
       <metric defaultrate="none" description="%METRIC_SOCKET_TIMEDOUT_DESCRIPTION" displayname="%METRIC_SOCKET_TIMEDOUT_LABEL" hidedisplayaggregation="sum count" name="SocketTimedOut" unit="number" />
       <metric defaultrate="none" description="%METRIC_CONNECTION_TIMEDOUT_DESCRIPTION" displayname="%METRIC_CONNECTION_TIMEDOUT_LABEL" hidedisplayaggregation="sum count" name="ConnectionTimedOut" unit="number" />

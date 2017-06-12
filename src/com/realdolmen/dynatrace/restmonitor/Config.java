@@ -45,6 +45,9 @@ public class Config implements Migrator {
 
 	protected static final String CONFIG_USE_HEADER = "useHeader";
 	protected static final String CONFIG_HEADER = "header";
+	
+	protected static final String CONFIG_MATCH_CONTENT = "matchContent";
+	protected static final String CONFIG_SEARCH_STRING = "searchString";
 
 	protected static final String CONFIG_USE_PROXY = "useProxy";
 	protected static final String CONFIG_PROXY_HOST = "proxyHost";
@@ -82,6 +85,10 @@ public class Config implements Migrator {
 	// additional headers
 	boolean useHeader;
 	String header;
+	
+	// match content
+	boolean matchContent;
+	String searchString;
 	
 	// proxy
 	boolean useProxy;
@@ -155,6 +162,11 @@ public class Config implements Migrator {
 		useHeader = env.getConfigBoolean(CONFIG_USE_HEADER) == null ? false : env.getConfigBoolean(CONFIG_USE_HEADER);
 		if (useHeader) {
 			header = env.getConfigString(CONFIG_HEADER);
+		}
+		
+		matchContent = env.getConfigBoolean(CONFIG_MATCH_CONTENT) == null ? false : env.getConfigBoolean(CONFIG_MATCH_CONTENT);
+		if (matchContent) {
+			searchString = env.getConfigString(CONFIG_SEARCH_STRING);
 		}
 		
 		useProxy = env.getConfigBoolean(CONFIG_USE_PROXY) == null ? false : env.getConfigBoolean(CONFIG_USE_PROXY);

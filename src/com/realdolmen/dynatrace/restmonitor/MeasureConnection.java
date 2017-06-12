@@ -23,6 +23,7 @@ public class MeasureConnection {
 	static final String MSR_CONN_CLOSE_DELAY = "ConnectionCloseDelay";
 	static final String MSR_SOCKET_TIMEOUT = "SocketTimedOut";
 	static final String MSR_CONNECT_TIMEOUT = "ConnectionTimedOut";
+	static final String MSR_CONTENT_VERIFIED = "ContentVerified";
 
 	private static final double MILLIS = 0.000001;
 	private static final double SECS = 0.000000001;
@@ -36,6 +37,7 @@ public class MeasureConnection {
 	private int inputSize = 0;
 	private boolean socketTimedOut = false;
 	private boolean connectionTimedOut = false;
+	private boolean contentVerified = false;
 
 	private MonitorEnvironment monitorEnvironment;
 
@@ -68,6 +70,12 @@ public class MeasureConnection {
 		if ((measures = monitorEnvironment.getMonitorMeasures(METRIC_GROUP, MSR_SOCKET_TIMEOUT)) != null) {
 			for (MonitorMeasure measure : measures)
 				measure.setValue(socketTimedOut ? 1 : 0);
+		}
+		
+		// set content verified
+		if ((measures = monitorEnvironment.getMonitorMeasures(METRIC_GROUP, MSR_CONTENT_VERIFIED)) != null) {
+			for (MonitorMeasure measure : measures)
+				measure.setValue(contentVerified ? 1 : 0);
 		}
 	}
 
@@ -175,5 +183,10 @@ public class MeasureConnection {
 	void setConnectionTimedOut()
 	{
 		this.connectionTimedOut = true;
+	}
+	
+	void setContentVerified()
+	{
+		this.contentVerified = true;
 	}
 }

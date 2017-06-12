@@ -173,6 +173,13 @@ public class RestMonitor implements Monitor {
 						if (log.isLoggable(Level.FINE)){
 							messageBuffer.append("content: \n" + resultContent.toString());
 						}
+						
+						// check if content matches
+						if (matchContent(resultContent.toString()))
+						{
+							measureConnection.setContentVerified();
+						}
+
 						final MeasureCapturedValues measureCapturedValues = new MeasureCapturedValues(env);
 						measureCapturedValues.applyMeasuresToEnvironment(resultContent.toString(), config.format);
 					}
@@ -326,6 +333,27 @@ public class RestMonitor implements Monitor {
 			log.fine("Header Value: " + headerSplit[1]);
 			httpClient.addRequestHeader(headerSplit[0], headerSplit[1]);
 		}
+	}
+	
+	private boolean matchContent(String resultContent) {
+		if (!config.matchContent) {
+			log.fine("Not checking for file content.");
+			return false;
+		}
+		if (config.searchString.isEmpty()) {
+			log.warning("Search String is empty");
+			return false;
+		} else {
+			log.finer("Checking if: " + config.searchString.toString() + "is on");
+			log.finer("response: " + resultContent);
+			if(resultContent.contains(config.searchString.toString()))
+			{
+				log.finer("content match!");
+				return true;
+			}
+		}
+		log.fine("Bailing out content matching");
+		return false;
 	}
 
 	private void setupHttpClient() {
