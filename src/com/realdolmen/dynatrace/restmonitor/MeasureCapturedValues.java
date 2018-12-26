@@ -137,7 +137,7 @@ public class MeasureCapturedValues {
 			throw new RestMonitorConfigurationException("json response was empty!");
 		}
 		if (!jsonPath.isDefinite()){
-			log.fine("jsonPath Is Indefinite");
+			log.fine("jsonPath Is Indefinite! We will try to get only 1st value available");
 			List<Object> objList = jsonPath.read(jsonBody);
 			log.finer("object list" + objList.toString());
 			//workaround to get only one value to not deal with this now
